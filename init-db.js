@@ -3,6 +3,8 @@ const Module = require('./models/Module');
 const Page = require('./models/Page');
 const Application = require('./models/Application');
 const DataSource = require('./models/DataSource');
+const ClientType = require('./models/ClientType');
+const DeviceAdaptation = require('./models/DeviceAdaptation');
 
 async function initDatabase() {
   try {
@@ -179,6 +181,59 @@ async function initDatabase() {
     });
 
     console.log('示例页面创建成功');
+
+    // 创建示例客户端类型
+    const mobileClientType = await ClientType.create({
+      id: 'react-native-client',
+      name: 'React Native 客户端',
+      platform: 'mobile',
+      config_template: {
+        framework: 'react-native',
+        version: '0.72.0',
+        plugins: ['react-navigation', 'axios']
+      }
+    });
+
+    const pcClientType = await ClientType.create({
+      id: 'electron-client',
+      name: 'Electron 客户端',
+      platform: 'pc',
+      config_template: {
+        framework: 'electron',
+        version: '25.0.0',
+        windowConfig: {
+          width: 1200,
+          height: 800
+        }
+      }
+    });
+
+    console.log('示例客户端类型创建成功');
+
+    // 创建示例设备适配
+    await DeviceAdaptation.create({
+      id: 'header-mobile-adaptation',
+      module_id: 'header',
+      client_type_id: 'react-native-client',
+      adaptation_config: {
+        layout: {
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          alignItems: 'center'
+        },
+        components: {
+          logo: {
+            width: 60,
+            height: 60
+          },
+          nav: {
+            type: 'bottom-tabs'
+          }
+        }
+      }
+    });
+
+    console.log('示例设备适配创建成功');
 
     console.log('数据库初始化完成！');
   } catch (error) {

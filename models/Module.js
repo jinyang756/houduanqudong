@@ -22,6 +22,24 @@ const Module = sequelize.define('modules', {
     type: DataTypes.JSON,
     allowNull: false
   },
+  multi_platform_config: {
+    type: DataTypes.JSON,
+    allowNull: true,
+    defaultValue: {
+      platforms: {
+        mobile: {
+          enabled: false,
+          framework: 'react-native',
+          adaptions: {}
+        },
+        pc: {
+          enabled: false,
+          framework: 'electron',
+          adaptions: {}
+        }
+      }
+    }
+  },
   version: {
     type: DataTypes.STRING(20),
     defaultValue: '1.0.0'
